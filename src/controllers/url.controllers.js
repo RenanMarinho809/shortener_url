@@ -34,4 +34,118 @@ const createShortUrl = async (req, res, next) => {
     }
   }
 
-  export { createShortUrl }
+  const getUrls = async (req, res, next) => {
+    try {
+      const urls = await Url.find();
+  
+      res.status(200).json({
+        success: true,
+        urls
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500);
+      next(new Error(error.message));
+    }
+  }
+  
+  const getURL = async (req, res, next) => {
+    try {
+      const { shortUrl } = req.params;
+  
+      if (!shortUrl) {
+        res.status(400)
+        return next(new Error("shortUrl is required"));
+      }
+  
+      const url = await Url.findOne({ shortUrl });
+      if (!url) {
+        res.status(404);
+        return next(new Error("URL not found"));
+      }
+  
+      res.status(200).json(url);
+    } catch (error) {
+      console.error(error);
+      res.status(500);
+      next(new Error(error.message));
+    }
+  }
+  
+  const redirectUrl = async (req, res, next) => {
+    try {
+      const { shortUrl } = req.params;
+  
+      if (!shortUrl) {
+        res.status(400)
+        return next(new Error("shortUrl is required"));
+      }
+  
+      const url = await Url.findOne({ shortUrl });
+      if (!url) {
+        res.status(404);
+        return next(new Error("URL not found"));
+      }
+  
+      res.status(301).redirect(url.originalUrl);
+    } catch (error) {
+      console.error(error);
+      res.status(500);
+      next(new Error(error.message));
+    }
+  }
+
+  const updateUrl = async (req, res, next) => {
+    const { shortUrl } = req.params;
+    const { originalUrl } = req.body;
+  
+    if (!shortUrl || !originalUrl) {
+      res.status(400);
+      return next(new Error("shortUrl in route params & originalUrl in the request body is required"));
+    }
+  
+    try {
+      const url = await Url.findOneAndUpdate({ shortUrl }, {
+        originalUrl
+      }, {
+        new: true
+      });
+  
+      if (!url) {
+        res.status(404)
+        return next(new Error("URL not found to update"));
+      }
+  
+      res.status(200).json(url);
+    } catch (error) {
+      console.error(error);
+      res.status(500);
+      next(new Error(error.message));
+    }
+  }
+
+  const deleteUrl = async (req, res, next) => {
+    const { shortUrl } = req.params;
+  
+    if (!shortUrl) {
+      res.status(400);
+      return next(new Error("shortUrl is required"));
+    }
+  
+    try {
+      const deletedUrl = await Url.findOneAndDelete({ shortUrl });
+      if (!deletedUrl) {
+        res.status(404)
+        return next(new Error("URL not found to delete"));
+      }
+  
+      res.status(200).json(deletedUrl);
+    } catch (error) {
+      console.error(error);
+      res.status(500);
+      next(new Error(error.message));
+    }
+  }
+  
+
+  export { createShortUrl , getUrls , getURL , redirectUrl , updateUrl , deleteUrl};
