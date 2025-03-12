@@ -1,0 +1,25 @@
+{
+  "name": "shortener_url",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --watach src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RenanMarinho809/shortener_url.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/RenanMarinho809/shortener_url/issues"
+  },
+  "homepage": "https://github.com/RenanMarinho809/shortener_url#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1"
+  }
+}
