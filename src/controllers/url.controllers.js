@@ -139,7 +139,7 @@ const createShortUrl = async (req, res, next) => {
         return next(new Error("URL not found to delete"));
       }
   
-      res.status(200).json(deletedUrl);
+      res.status(200).json('URL deleted successfully');
     } catch (error) {
       console.error(error);
       res.status(500);
